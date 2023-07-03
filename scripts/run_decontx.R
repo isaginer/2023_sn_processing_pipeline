@@ -1,0 +1,32 @@
+suppressPackageStartupMessages(library(Seurat))
+suppressPackageStartupMessages(library(celda))
+suppressPackageStartupMessages(library(DropletUtils))
+set.seed(123)
+
+min_cells <- snakemake@config[["min_cells"]]
+min_features <- snakemake@config[["min_features"]]
+DECONTX_DIR <- snakemake@config["decontx_dir"]
+SAMPLE <- snakemake@wildcards$sample
+
+counts <- Read10X(snakemake@input[[1]])
+counts.raw <- Read10X(snakemake@input[[2]])
+
+# Create a SingleCellExperiment object and run decontX
+sce <- SingleCellExperiment(list(counts = counts))
+sce.raw <- SingleCellExperiment(list(counts = counts.raw))
+sce <- decontX(sce, background = sce.raw)
+counts_new <- round(decontXcounts(sce))
+
+# Create a Seurat object from a SCE with decontX results
+seu <- CreateSeuratObject(counts_new,
+                        min.cells = min_cells,
+                        min.features = min_features)
+
+outs_path <- file.path(DECONTX_DIR, SAMPLE, "outs")
+dir.create(outs_path, showWarnings = FALSE, recursive = TRUE)
+write10xCounts(x = seu@assays$RNA@counts,
+                overwrite = TRUE,
+                version = "3",
+                path = file.path(outs_path, "filtered_feature_bc_matrix"))
+
+cat(NULL, file = snakemake@output[[1]])

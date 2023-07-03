@@ -1,0 +1,50 @@
+# Conda env
+
+
+# Directories
+align_dir: "data/cellranger"
+decontx_dir: "data/decontx"
+stats_dir: "statistics"
+plots_dir: "plots"
+doublets_dir: "data/RDS/doublets"
+qc_dir: "data/RDS/QC"
+downstream_dir: "data/RDS/downstream"
+cellxgene_dir: "data/H5DF/cellxgene"
+
+# Workflow
+doublets_integrated: True
+skip_soup: False
+#downstream_step_dirs:
+#  normalization: "data_v2/RDS/downstream/normalization"
+#  integration: "data_v2/RDS/downstream/integration"
+#  garnett: "data_v2/RDS/downstream/integration/garnett"
+
+# Metadata
+samples: "data/samples_short.csv"
+phenodata: "data/WUSTL_AUS_all_manifests_20220225.xlsx"
+
+# Garnett model
+model_path: "reference/garnett/garnett_model.Rdata"
+
+# Parameters
+min_cells: 3
+min_features: 10
+doublet_dims: 10
+
+## QC
+sum_log_nmad: [3, 4, 5, 6]
+detected_log_nmad: [1, 2, 3]
+prc_20_nmad: [3, 4, 5, 6]
+prc_mt_nmad: [5, 6, 7, 10]
+mt_thresh: 10
+keep_statement: ["outlier_sum_log_6_lower",
+                 "outlier_detected_log_2_lower",
+                 "outlier_mt_thresh_10"]
+
+## Integration
+integration_nfeatures: 2000
+integration_ndims: 50 
+processing_ndims: 30
+clustering_res: [0.2, 0.4, 0.6, 0.8, 1]
+garnett_cluster: "integrated_snn_res.0.2"
+

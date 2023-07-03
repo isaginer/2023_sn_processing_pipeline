@@ -1,0 +1,7 @@
+data/*
+logs/*
+reference/*
+!.dvc
+.snakemake/*
+.vscode/*
+statistics/*

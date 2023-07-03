@@ -1,0 +1,166 @@
+# Libraries
+from os.path import join
+
+# Includes
+include: "load_samples.smk"
+
+# Variables
+ALIGN_DIR = config["decontx_dir"]
+CR_LOCATION = "outs/filtered_feature_bc_matrix"
+if ("skip_soup" in config.keys() and config["skip_soup"]):
+    ALIGN_DIR = config["align_dir"]
+STATS_DIR = config["stats_dir"]
+SCDF_RESULTS_DIR = join(config["doublets_dir"],"scDblFinder")
+DF_RESULTS_DIR = join(config["doublets_dir"],"DoubletFinder")
+DF_PARAMS_DIR = join(DF_RESULTS_DIR,"params")
+GARNETT_DIR = join(config["doublets_dir"],"garnett")
+PROCESSED_DIR = join(config["doublets_dir"],"processed")
+FILTERED_DIR = join(config["doublets_dir"],"filtered")
+PLOTS_DIR = join(config["plots_dir"],"doublets")
+
+plots_list = ["scDblfinder_density", "DoubletFinder_density",
+              "garnett_density", "doublets_overlap", "doublets_pass",
+              "umap_garnett"]
+
+all_output_list = [join(PROCESSED_DIR,"{sample}.rds"),
+                   join(FILTERED_DIR,"{sample}.rds"),
+                   join(STATS_DIR,"doublets_stats.tsv"),
+                   *[join(PLOTS_DIR,e,"{sample}.png") for e in plots_list]
+                  ]
+
+if ("doublets_integrated" in config.keys() and config["doublets_integrated"]):
+    all_output_list.append(join(PROCESSED_DIR,"integrated.qs"))
+
+
+# Rules
+rule doublets_all:
+    input:
+        expand(all_output_list,
+                sample = SAMPLES_DF.index)
+    default_target: True
+
+
+rule doublets_optimize_pk_df:
+    conda: 
+        "2023_aus_brain"
+    input:
+        join(ALIGN_DIR, "{sample}", "decontx.done")
+    output:
+        join(DF_PARAMS_DIR,"{sample}.rds")
+    params:
+        mtx_location = CR_LOCATION
+    log:
+        "logs/{sample}/optimize_pk_df.log"
+    script:
+        "../../scripts/optimize_pk_df.R"
+
+
+rule doublets_find_doublets_scdf:
+    conda: 
+        "2023_aus_brain"
+    input: 
+        join(ALIGN_DIR, "{sample}", "decontx.done")
+    output: 
+        join(SCDF_RESULTS_DIR,"{sample}.rds")
+    params:
+        mtx_location = CR_LOCATION
+    log:
+        "logs/{sample}/find_doublets_scdf.log"
+    script:
+        "../../scripts/find_doublets_scdf.R"
+
+
+rule doublets_find_doublets_df:
+    conda: 
+        "2023_aus_brain"
+    input:
+        join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        rules.doublets_optimize_pk_df.output,
+        rules.doublets_find_doublets_scdf.output
+    output:
+        join(DF_RESULTS_DIR,"{sample}.rds")
+    log:
+        "logs/{sample}/find_doublets_df.log"
+    script:
+        "../../scripts/find_doublets_df.R"
+
+
+rule doublets_garnett_predict:
+    conda: 
+        "2023_aus_brain"
+    input: 
+        join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        rules.doublets_find_doublets_df.output,
+        rules.doublets_find_doublets_scdf.output
+    output: 
+        join(GARNETT_DIR,"{sample}.rds")
+    log:
+        "logs/{sample}/garnett_predict.log"
+    script:
+        "../../scripts/garnett_predict.R"
+
+
+rule doublets_process:
+    conda: 
+        "2023_aus_brain"
+    input: 
+        join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        rules.doublets_garnett_predict.output,
+        rules.doublets_find_doublets_scdf.output,
+        rules.doublets_find_doublets_df.output
+    output: 
+        join(PROCESSED_DIR,"{sample}.rds"),
+        join(FILTERED_DIR,"{sample}.rds")
+    log:
+        "logs/{sample}/processed_doublets.log"
+    script:
+        "../../scripts/processed_doublets.R"
+
+
+rule doublets_make_plots:
+    conda: 
+        "2023_aus_brain"
+    input: 
+        rules.doublets_process.output
+    output: 
+        [join(PLOTS_DIR,e,"{sample}.png") for e in plots_list]
+    params:
+        plots_list = plots_list
+    log:
+        "logs/{sample}/make_plots_doublets.log"
+    script:
+        "../../scripts/make_plots_doublets.R"
+
+
+rule doublets_collect_stats:
+    conda: 
+        "2023_aus_brain"
+    input: 
+        expand(rules.doublets_process.output,
+               sample = SAMPLES_DF.index)
+    output: 
+        join(STATS_DIR,"doublets_stats.tsv")
+    params:
+        plots_list = plots_list
+    log:
+        "logs/collect_stats_doublets.log"
+    script:
+        "../../scripts/collect_stats_doublets.R"
+
+
+rule doublets_integrate:
+    conda: 
+        "2023_aus_brain"
+    input: 
+        expand(rules.doublets_process.output,
+               sample = SAMPLES_DF.index)
+    output: 
+        integrated = join(PROCESSED_DIR,"integrated.qs"),
+        features = join(PROCESSED_DIR,"integrated_features.qs"),
+        anchors = join(PROCESSED_DIR,"integrated_anchors.qs")
+    params:
+        plots_list = plots_list
+    log:
+        "logs/integrate_doublets.log"
+    script:
+        "../../scripts/integrate_doublets.R"
