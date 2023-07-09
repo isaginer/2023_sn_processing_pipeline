@@ -13,6 +13,7 @@ cellxgene_dir: "data/H5DF/cellxgene"
 
 # Workflow
 doublets_integrated: True
+qc_integrated: True
 skip_soup: False
 #downstream_step_dirs:
 #  normalization: "data_v2/RDS/downstream/normalization"
@@ -37,6 +38,7 @@ detected_log_nmad: [1, 2, 3]
 prc_20_nmad: [3, 4, 5, 6]
 prc_mt_nmad: [5, 6, 7, 10]
 mt_thresh: 10
+nuclei_thresh: 1
 keep_statement: ["outlier_sum_log_6_lower",
                  "outlier_detected_log_2_lower",
                  "outlier_mt_thresh_10"]

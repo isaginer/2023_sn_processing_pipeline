@@ -109,8 +109,8 @@ rule doublets_process:
         rules.doublets_find_doublets_scdf.output,
         rules.doublets_find_doublets_df.output
     output: 
-        join(PROCESSED_DIR,"{sample}.rds"),
-        join(FILTERED_DIR,"{sample}.rds")
+        processed = join(PROCESSED_DIR,"{sample}.rds"),
+        filtered = join(FILTERED_DIR,"{sample}.rds")
     log:
         "logs/{sample}/processed_doublets.log"
     script:
@@ -121,7 +121,7 @@ rule doublets_make_plots:
     conda: 
         "2023_aus_brain"
     input: 
-        rules.doublets_process.output
+        rules.doublets_process.output.processed
     output: 
         [join(PLOTS_DIR,e,"{sample}.png") for e in plots_list]
     params:
@@ -136,7 +136,7 @@ rule doublets_collect_stats:
     conda: 
         "2023_aus_brain"
     input: 
-        expand(rules.doublets_process.output,
+        expand(rules.doublets_process.output.processed,
                sample = SAMPLES_DF.index)
     output: 
         join(STATS_DIR,"doublets_stats.tsv")
@@ -152,7 +152,7 @@ rule doublets_integrate:
     conda: 
         "2023_aus_brain"
     input: 
-        expand(rules.doublets_process.output,
+        expand(rules.doublets_process.output.processed,
                sample = SAMPLES_DF.index)
     output: 
         integrated = join(PROCESSED_DIR,"integrated.qs"),
