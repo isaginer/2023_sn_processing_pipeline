@@ -9,16 +9,16 @@ nuclei_thresh <- snakemake@config[["nuclei_thresh"]]
 keep_columns <- snakemake@config[["keep_statement"]]
 
 qc_stats <- matrix(0, nrow = length(snakemake@input), ncol = 13)
-colnames(qc_stats) <- c("Total","Fraction_QC_pass","Removed_cells",
-                        "MT_fraction","MT_fraction_prc",
-                        "Nuclei_fraction","Nuclei_fraction_prc",
-                        "nUMI_outliers","nUMI_outliers_prc",
-                        "nGenes_outliers","nGenes_outliers_prc",
-                        "Phase2_Median_UMI","Phase2_Median_nGenes")
+colnames(qc_stats) <- c("Total", "Fraction_QC_pass", "Removed_cells",
+                        "MT_fraction", "MT_fraction_prc",
+                        "Nuclei_fraction", "Nuclei_fraction_prc",
+                        "nUMI_outliers", "nUMI_outliers_prc",
+                        "nGenes_outliers", "nGenes_outliers_prc",
+                        "Phase2_Median_UMI", "Phase2_Median_nGenes")
 
 idx <- 1
 SAMPLES <- c()
-print(snakemake@input)
+
 for (SAMPLE_RDS in snakemake@input) {
     seu <- readRDS(SAMPLE_RDS)
     SAMPLE <- seu@project.name
