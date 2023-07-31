@@ -19,7 +19,7 @@ rule decontx_all:
 
 rule decontx_run_decontx:
     conda:  
-        "2023_aus_brain"
+        config["conda_env"]
     input:
         join(ALIGN_DIR, "{sample}", FILTERED_LOCATION),
         join(ALIGN_DIR, "{sample}", RAW_LOCATION)

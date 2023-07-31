@@ -35,7 +35,7 @@ rule qc_all:
 
 
 rule filter_samples_by_QC:
-    conda: "2023_aus_brain"
+    conda: config["conda_env"]
     input:
         join(DBL_FILTERED_DIR,"{sample}.rds")
     output:
@@ -47,7 +47,7 @@ rule filter_samples_by_QC:
 
 rule qc_process:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         join(DBL_FILTERED_DIR,"{sample}.rds"),
         join(COMPLEX_DIR,"{sample}.rds")
@@ -61,7 +61,7 @@ rule qc_process:
 
 rule qc_make_plots:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         rules.qc_process.output
     output: 
@@ -76,7 +76,7 @@ rule qc_make_plots:
 
 rule qc_collect_stats:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         expand(rules.qc_process.output,
                sample = SAMPLES_DF.index)
@@ -92,7 +92,7 @@ rule qc_collect_stats:
 
 rule qc_integrate:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         expand(rules.qc_process.output,
                sample = SAMPLES_DF.index)

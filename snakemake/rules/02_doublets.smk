@@ -42,7 +42,7 @@ rule doublets_all:
 
 rule doublets_optimize_pk_df:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input:
         join(ALIGN_DIR, "{sample}", "decontx.done")
     output:
@@ -57,7 +57,7 @@ rule doublets_optimize_pk_df:
 
 rule doublets_find_doublets_scdf:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         join(ALIGN_DIR, "{sample}", "decontx.done")
     output: 
@@ -72,7 +72,7 @@ rule doublets_find_doublets_scdf:
 
 rule doublets_find_doublets_df:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input:
         join(ALIGN_DIR,"{sample}",CR_LOCATION),
         rules.doublets_optimize_pk_df.output,
@@ -87,7 +87,7 @@ rule doublets_find_doublets_df:
 
 rule doublets_garnett_predict:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         join(ALIGN_DIR,"{sample}",CR_LOCATION),
         rules.doublets_find_doublets_df.output,
@@ -102,7 +102,7 @@ rule doublets_garnett_predict:
 
 rule doublets_process:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         join(ALIGN_DIR,"{sample}",CR_LOCATION),
         rules.doublets_garnett_predict.output,
@@ -119,7 +119,7 @@ rule doublets_process:
 
 rule doublets_make_plots:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         rules.doublets_process.output.processed
     output: 
@@ -134,7 +134,7 @@ rule doublets_make_plots:
 
 rule doublets_collect_stats:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         expand(rules.doublets_process.output.processed,
                sample = SAMPLES_DF.index)
@@ -150,7 +150,7 @@ rule doublets_collect_stats:
 
 rule doublets_integrate:
     conda: 
-        "2023_aus_brain"
+        config["conda_env"]
     input: 
         expand(rules.doublets_process.output.processed,
                sample = SAMPLES_DF.index)

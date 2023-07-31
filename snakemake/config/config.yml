@@ -1,5 +1,5 @@
 # Conda env
-
+conda_env: "test_pipeline"
 
 # Directories
 align_dir: "data/cellranger"
