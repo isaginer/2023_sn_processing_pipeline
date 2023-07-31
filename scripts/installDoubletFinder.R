@@ -1,5 +1,0 @@
-install.packages("pak", repos = "http://cran.us.r-project.org")
-pak::pkg_install("Seurat")
-pak::pkg_install("scater")
-pak::pkg_install("chris-mcginnis-ucsf/DoubletFinder")
-pak::pkg_install("scDblFinder")
