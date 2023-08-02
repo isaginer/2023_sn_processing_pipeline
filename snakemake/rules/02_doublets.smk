@@ -105,7 +105,7 @@ rule doublets_process:
         config["conda_env"]
     input: 
         join(ALIGN_DIR,"{sample}",CR_LOCATION),
-        rules.doublets_garnett_predict.output,
+        #rules.doublets_garnett_predict.output,
         rules.doublets_find_doublets_scdf.output,
         rules.doublets_find_doublets_df.output
     output: 

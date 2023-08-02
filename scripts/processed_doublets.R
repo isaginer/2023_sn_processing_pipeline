@@ -6,15 +6,15 @@ min_cells <- snakemake@config[["min_cells"]]
 ndims <- snakemake@config[["processing_ndims"]]
 
 sample_path <- snakemake@input[[1]]
-metadata <- readRDS(snakemake@input[[2]])
-metadata_2 <- as.data.frame(readRDS(snakemake@input[[3]]))
-metadata_3 <- as.data.frame(readRDS(snakemake@input[[4]]))
+#metadata <- readRDS(snakemake@input[[2]])
+metadata_2 <- as.data.frame(readRDS(snakemake@input[[2]]))
+metadata_3 <- as.data.frame(readRDS(snakemake@input[[3]]))
 
 seu <- CreateSeuratObject(Read10X(sample_path),
                           min.cells = min_cells,
                           project = snakemake@wildcards$sample)
 
-seu <- AddMetaData(seu, metadata)
+#seu <- AddMetaData(seu, metadata)
 seu <- AddMetaData(seu, metadata_2)
 seu <- AddMetaData(seu, metadata_3)
 
@@ -28,10 +28,11 @@ seu <- PercentageFeatureSet(seu,
     FindNeighbors(dims = 1:ndims, verbose = FALSE) %>%
     FindClusters(verbose = FALSE)
 
+seu$garnett_prediction <- "Not_predicted"
 seu$merged_doublets <- paste0(seu$doublet_prc, "_", seu$scDblFinder.class)
-selected_cells <- rownames(seu@meta.data[((seu$merged_doublets == "Singlet_singlet") & (seu$garnett_prediction == "Unknown")), ])
+selected_cells <- rownames(seu@meta.data[((seu$merged_doublets == "Singlet_singlet") & (seu$garnett_prediction != "Unknown")), ])
 seu$pass_doublets_QC <- "PASS"
-seu@meta.data[selected_cells,"pass_doublets_QC"] <- "FAIL"
+seu@meta.data[selected_cells, "pass_doublets_QC"] <- "FAIL"
 saveRDS(seu, file = snakemake@output[[1]])
 
 seu_filtered <- subset(seu, pass_doublets_QC == "PASS")

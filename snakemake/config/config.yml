@@ -22,10 +22,10 @@ skip_soup: False
 
 # Metadata
 samples: "data/samples_short.csv"
-phenodata: "data/WUSTL_AUS_all_manifests_20220225.xlsx"
+#phenodata: "data/WUSTL_AUS_all_manifests_20220225.xlsx"
 
 # Garnett model
-model_path: "reference/garnett/garnett_model.Rdata"
+#model_path: "reference/garnett/garnett_model.Rdata"
 
 # Parameters
 min_cells: 3
