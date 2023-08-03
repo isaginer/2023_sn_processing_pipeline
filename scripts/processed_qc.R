@@ -13,7 +13,11 @@ ndims <- snakemake@config[["processing_ndims"]]
 sample_path <- snakemake@input[[1]]
 metadata <- readRDS(snakemake@input[[2]])
 
-seu <- CreateSeuratObject(Read10X(sample_path),
+counts <- Read10X(sample_path)
+if (length(names(counts)) > 1) {
+  counts <- counts$`Gene Expression`
+}
+seu <- CreateSeuratObject(counts,
                           min.cells = min_cells,
                           project = snakemake@wildcards$sample)
 

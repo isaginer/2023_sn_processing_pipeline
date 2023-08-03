@@ -14,7 +14,12 @@ metadata_2 <- as.data.frame(readRDS(snakemake@input[[3]]))
 
 load(model_path)
 
-seu <- CreateSeuratObject(Read10X(sample_path),
+counts <- Read10X(sample_path)
+if (length(names(counts)) > 1) {
+  counts <- counts$`Gene Expression`
+}
+
+seu <- CreateSeuratObject(counts,
                           min.cells = min_cells)
 
 seu <- AddMetaData(seu, metadata)

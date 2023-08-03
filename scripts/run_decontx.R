@@ -11,6 +11,14 @@ SAMPLE <- snakemake@wildcards$sample
 counts <- Read10X(snakemake@input[[1]])
 counts.raw <- Read10X(snakemake@input[[2]])
 
+if (length(names(counts)) > 1) {
+  counts <- counts$`Gene Expression`
+}
+
+if (length(names(counts.raw)) > 1) {
+  counts.raw <- counts.raw$`Gene Expression`
+}
+
 # Create a SingleCellExperiment object and run decontX
 sce <- SingleCellExperiment(list(counts = counts))
 sce.raw <- SingleCellExperiment(list(counts = counts.raw))

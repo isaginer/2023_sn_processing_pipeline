@@ -17,6 +17,10 @@ dims_ <- snakemake@config[["doublet_dims"]]
 
 counts <- Read10X(file.path(dirname(snakemake@input[[1]]),
                             snakemake@params[["mtx_location"]]))
+
+if (length(names(counts)) > 1) {
+  counts <- counts$`Gene Expression`
+}
 seu <- CreateSeuratObject(counts,
                           min.cells = min_cells) %>%
     SCTransform() %>%

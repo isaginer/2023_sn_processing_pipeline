@@ -19,8 +19,12 @@ min_cells <- snakemake@config[["min_cells"]]
 dims_ <- snakemake@config[["doublet_dims"]]
 
 sample_path <- snakemake@input[[1]]
+counts <- Read10X(sample_path)
+if (length(names(counts)) > 1) {
+  counts <- counts$`Gene Expression`
+}
 
-seu <- CreateSeuratObject(Read10X(sample_path),
+seu <- CreateSeuratObject(counts,
                           min.cells = min_cells) %>%
     SCTransform() %>%
     RunPCA() %>%
