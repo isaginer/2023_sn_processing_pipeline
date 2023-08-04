@@ -52,8 +52,8 @@ rule qc_process:
         join(DBL_FILTERED_DIR,"{sample}.rds"),
         join(COMPLEX_DIR,"{sample}.rds")
     output: 
-        join(PROCESSED_DIR,"{sample}.rds"),
-        join(FILTERED_DIR,"{sample}.rds")
+        processed = join(PROCESSED_DIR,"{sample}.rds"),
+        filtered = join(FILTERED_DIR,"{sample}.rds")
     log:
         "logs/{sample}/processed_qc.log"
     script:
@@ -63,7 +63,7 @@ rule qc_make_plots:
     conda: 
         config["conda_env"]
     input: 
-        rules.qc_process.output
+        rules.qc_process.output.processed
     output: 
         [join(PLOTS_DIR,e,"{sample}.png") for e in plots_list]
     params:
@@ -78,7 +78,7 @@ rule qc_collect_stats:
     conda: 
         config["conda_env"]
     input: 
-        expand(rules.qc_process.output,
+        expand(rules.qc_process.output.processed,
                sample = SAMPLES_DF.index)
     output: 
         join(STATS_DIR,"qc_stats.tsv")
@@ -94,7 +94,7 @@ rule qc_integrate:
     conda: 
         config["conda_env"]
     input: 
-        expand(rules.qc_process.output,
+        expand(rules.qc_process.output.processed,
                sample = SAMPLES_DF.index)
     output: 
         integrated = join(PROCESSED_DIR,"integrated.qs"),
