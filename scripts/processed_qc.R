@@ -10,7 +10,7 @@ seu <- readRDS(snakemake@input[[1]])
 metadata <- readRDS(snakemake@input[[2]])
 
 seu <- AddMetaData(seu, metadata)
-DefaultAssay(seu_sub) <- "RNA"
+DefaultAssay(seu) <- "RNA"
 
 seu <- PercentageFeatureSet(seu,
                             pattern = "^[MT|mt]-",
