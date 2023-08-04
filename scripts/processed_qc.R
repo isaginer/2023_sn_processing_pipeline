@@ -49,8 +49,8 @@ seu$qc_cluster_ext_type <- "Not_predicted"
 # seu <- AddMetaData(seu, predictions)
 
 selected_cells <- rownames(seu@meta.data[seu$keep, ])
-seu$pass_QC <- "PASS"
-seu@meta.data[selected_cells,"pass_QC"] <- "FAIL"
+seu$pass_QC <- "FAIL"
+seu@meta.data[selected_cells,"pass_QC"] <- "PASS"
 saveRDS(seu, file = snakemake@output[[1]])
 
 seu_filtered <- subset(seu, pass_QC == "PASS")
