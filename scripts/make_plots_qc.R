@@ -5,14 +5,27 @@ suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(gridExtra))
 set.seed(123)
 
-nuclei_genes <- c("MALAT1", "NEAT1", "FTX",
+nuclei_genes_hs <- c("MALAT1", "NEAT1", "FTX",
                   "FOXP1", "RBMS3", "ZBTB20", "LRMDA", "PBX1", "ITPR2", "AUTS2", "TTC28", "BNC2", "EXOC4", "RORA",
                   "PRKG1", "ARID1B", "PARD3B", "GPHN", "N4BP2L2", "PKHD1L1", "EXOC6B", "FBXL7", "MED13L",
                   "TBC1D5", "IMMP2L", "SYNE1", "RERE", "MBD5", "EXT1", "WWOX")
+nuclei_genes_mm <- c("Malat1","Neat1","Ftx","Foxp1","Rbms3","Zbtb20","Lrmda",
+                     "Pbx1","Itpr2","Auts2","Ttc28","Bnc2","Exoc4","Rora",
+                     "Prkg1", "Arid1b", "Pard3b", "Gphn", "N4bp2l2","Pkhd1l1",
+                     "Exoc6b", "Fbxl7", "Med13l", "Tbc1d5", "Immp2l", "Syne1",
+                     "Rere", "Mbd5", "Ext1", "Wwox")
+nuclei_genes <- c(nuclei_genes_hs,nuclei_genes_mm)
 
 seu_sub <- readRDS(snakemake@input[[1]])
+DefaultAssay(seu_sub) <- "RNA"
+
 seu_sub <- PercentageFeatureSet(seu_sub, pattern = "^[MT|mt]-", col.name = "percent.mt")
-seu_sub <- PercentageFeatureSet(seu_sub, features = nuclei_genes, col.name = "percent.nuclei")
+nuclei_genes <- nuclei_genes[nuclei_genes %in% rownames(seu_sub)]
+if (length(nuclei_genes)>0) {
+  seu_sub <- PercentageFeatureSet(seu_sub, features = nuclei_genes, col.name = "percent.nuclei")  
+} else {
+  seu_sub$percent.nuclei <- NA
+}
 
 seu_sub$nCount_RNA_log <- log10(seu_sub$nCount_RNA)
 seu_sub$nFeature_RNA_log <- log10(seu_sub$nFeature_RNA)
