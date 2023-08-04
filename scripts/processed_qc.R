@@ -4,9 +4,6 @@ suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(dplyr))
 set.seed(123)
 
-model_path <- snakemake@config[["model_path"]]
-load(model_path)
-
 min_cells <- snakemake@config[["min_cells"]]
 ndims <- snakemake@config[["processing_ndims"]]
 
