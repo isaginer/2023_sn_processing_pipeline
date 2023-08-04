@@ -35,8 +35,8 @@ seu <- PercentageFeatureSet(seu,
 seu$garnett_prediction <- "Not_predicted"
 seu$merged_doublets <- paste0(seu$doublet_prc, "_", seu$scDblFinder.class)
 selected_cells <- rownames(seu@meta.data[((seu$merged_doublets == "Singlet_singlet") & (seu$garnett_prediction != "Unknown")), ])
-seu$pass_doublets_QC <- "PASS"
-seu@meta.data[selected_cells, "pass_doublets_QC"] <- "FAIL"
+seu$pass_doublets_QC <- "FAIL"
+seu@meta.data[selected_cells, "pass_doublets_QC"] <- "PASS"
 saveRDS(seu, file = snakemake@output[[1]])
 
 seu_filtered <- subset(seu, pass_doublets_QC == "PASS")
