@@ -10,7 +10,9 @@ sample_path <- snakemake@input[[1]]
 metadata_2 <- as.data.frame(readRDS(snakemake@input[[2]]))
 metadata_3 <- as.data.frame(readRDS(snakemake@input[[3]]))
 
-counts <- Read10X(sample_path)
+counts <- Read10X(file.path(dirname(snakemake@input[[1]]),
+                            snakemake@params[["mtx_location"]]))
+
 if (length(names(counts)) > 1) {
   counts <- counts$`Gene Expression`
 }
