@@ -4,7 +4,6 @@ suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(dplyr))
 set.seed(123)
 
-min_cells <- snakemake@config[["min_cells"]]
 ndims <- snakemake@config[["processing_ndims"]]
 
 seu <- readRDS(snakemake@input[[1]])
