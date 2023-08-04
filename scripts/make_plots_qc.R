@@ -19,7 +19,7 @@ nuclei_genes <- c(nuclei_genes_hs,nuclei_genes_mm)
 seu_sub <- readRDS(snakemake@input[[1]])
 DefaultAssay(seu_sub) <- "RNA"
 
-seu_sub <- PercentageFeatureSet(seu_sub, pattern = "^[MT|mt]-", col.name = "percent.mt")
+seu_sub <- PercentageFeatureSet(seu_sub, pattern = "^(MT|mt)-", col.name = "percent.mt")
 nuclei_genes <- nuclei_genes[nuclei_genes %in% rownames(seu_sub)]
 if (length(nuclei_genes)>0) {
   seu_sub <- PercentageFeatureSet(seu_sub, features = nuclei_genes, col.name = "percent.nuclei")  

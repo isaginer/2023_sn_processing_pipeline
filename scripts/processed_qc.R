@@ -13,7 +13,7 @@ seu <- AddMetaData(seu, metadata)
 DefaultAssay(seu) <- "RNA"
 
 seu <- PercentageFeatureSet(seu,
-                            pattern = "^[MT|mt]-",
+                            pattern = "^(MT|mt)-",
                             col.name = "percent.mt") %>%
     SCTransform(method = "glmGamPoi",
                 vars.to.regress = "percent.mt", verbose = FALSE) %>%
