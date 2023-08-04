@@ -18,8 +18,9 @@ doublets_prc <- round(stats_$doublet / nrow(doublets_data), 4)
 min_cells <- snakemake@config[["min_cells"]]
 dims_ <- snakemake@config[["doublet_dims"]]
 
-sample_path <- snakemake@input[[1]]
-counts <- Read10X(sample_path)
+counts <- Read10X(file.path(dirname(snakemake@input[[1]]),
+                            snakemake@params[["mtx_location"]]))
+
 if (length(names(counts)) > 1) {
   counts <- counts$`Gene Expression`
 }

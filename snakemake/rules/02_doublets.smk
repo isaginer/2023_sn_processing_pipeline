@@ -74,11 +74,14 @@ rule doublets_find_doublets_df:
     conda: 
         config["conda_env"]
     input:
-        join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        #join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        join(ALIGN_DIR, "{sample}", "decontx.done"),
         rules.doublets_optimize_pk_df.output,
         rules.doublets_find_doublets_scdf.output
     output:
         join(DF_RESULTS_DIR,"{sample}.rds")
+    params:
+        mtx_location = CR_LOCATION
     log:
         "logs/{sample}/find_doublets_df.log"
     script:
@@ -104,13 +107,16 @@ rule doublets_process:
     conda: 
         config["conda_env"]
     input: 
-        join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        #join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        join(ALIGN_DIR, "{sample}", "decontx.done"),
         #rules.doublets_garnett_predict.output,
         rules.doublets_find_doublets_scdf.output,
         rules.doublets_find_doublets_df.output
     output: 
         processed = join(PROCESSED_DIR,"{sample}.rds"),
         filtered = join(FILTERED_DIR,"{sample}.rds")
+    params:
+        mtx_location = CR_LOCATION
     log:
         "logs/{sample}/processed_doublets.log"
     script:
