@@ -32,8 +32,8 @@ with open(snakemake.output["cellranger_stats"], 'w+') as csvfile:
                                         alarm["title"],
                                         alarm["formatted_value"],
                                         alarm["message"]))
+                        alarms_text = "\n".join(alarms)
                     break
-            alarms_text = "\n".join(alarms)
 
         # Parse cell ranger csv with metrics
         stats = dict()
