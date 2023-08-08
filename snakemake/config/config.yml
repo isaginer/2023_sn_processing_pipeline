@@ -1,5 +1,5 @@
 # Conda env
-conda_env: "test_pipeline"
+conda_env: "test_pipeline_fix"
 
 # Directories
 align_dir: "data/cellranger"
@@ -12,8 +12,8 @@ downstream_dir: "data/RDS/downstream"
 cellxgene_dir: "data/H5DF/cellxgene"
 
 # Workflow
-doublets_integrated: True
-qc_integrated: True
+doublets_integrated: False
+qc_integrated: False
 skip_soup: False
 #downstream_step_dirs:
 #  normalization: "data_v2/RDS/downstream/normalization"
@@ -29,7 +29,7 @@ samples: "data/samples_short.csv"
 
 # Parameters
 min_cells: 3
-min_features: 10
+min_features: 300
 doublet_dims: 10
 
 ## QC
