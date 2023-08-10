@@ -13,14 +13,15 @@ STATS_DIR = config["stats_dir"]
 SCDF_RESULTS_DIR = join(config["doublets_dir"],"scDblFinder")
 DF_RESULTS_DIR = join(config["doublets_dir"],"DoubletFinder")
 DF_PARAMS_DIR = join(DF_RESULTS_DIR,"params")
+SCTYPE_DIR = join(config["doublets_dir"],"sctype")
 GARNETT_DIR = join(config["doublets_dir"],"garnett")
 PROCESSED_DIR = join(config["doublets_dir"],"processed")
 FILTERED_DIR = join(config["doublets_dir"],"filtered")
 PLOTS_DIR = join(config["plots_dir"],"doublets")
 
 plots_list = ["scDblfinder_density", "DoubletFinder_density",
-              "garnett_density", "doublets_overlap", "doublets_pass",
-              "umap_garnett"]
+              "sctype_unknown_density", "doublets_overlap", "doublets_pass",
+              "umap_sctype", "umap_sctype_unknown"]
 
 all_output_list = [join(PROCESSED_DIR,"{sample}.rds"),
                    join(FILTERED_DIR,"{sample}.rds"),
@@ -74,7 +75,6 @@ rule doublets_find_doublets_df:
     conda: 
         config["conda_env"]
     input:
-        #join(ALIGN_DIR,"{sample}",CR_LOCATION),
         join(ALIGN_DIR, "{sample}", "decontx.done"),
         rules.doublets_optimize_pk_df.output,
         rules.doublets_find_doublets_scdf.output
@@ -92,24 +92,40 @@ rule doublets_garnett_predict:
     conda: 
         config["conda_env"]
     input: 
-        join(ALIGN_DIR,"{sample}",CR_LOCATION),
+        join(ALIGN_DIR, "{sample}", "decontx.done"),
         rules.doublets_find_doublets_df.output,
         rules.doublets_find_doublets_scdf.output
     output: 
         join(GARNETT_DIR,"{sample}.rds")
+    params:
+        mtx_location = CR_LOCATION
     log:
         "logs/{sample}/garnett_predict.log"
     script:
         "../../scripts/garnett_predict.R"
 
 
+rule doublets_sctype_predict:
+    conda: 
+        config["conda_env"]
+    input: 
+        join(ALIGN_DIR, "{sample}", "decontx.done")
+    output: 
+        join(SCTYPE_DIR,"{sample}.rds")
+    params:
+        mtx_location = CR_LOCATION
+    log:
+        "logs/{sample}/sctype_predict.log"
+    script:
+        "../../scripts/sctype_predict.R"
+
+
 rule doublets_process:
     conda: 
         config["conda_env"]
     input: 
-        #join(ALIGN_DIR,"{sample}",CR_LOCATION),
         join(ALIGN_DIR, "{sample}", "decontx.done"),
-        #rules.doublets_garnett_predict.output,
+        rules.doublets_sctype_predict.output,
         rules.doublets_find_doublets_scdf.output,
         rules.doublets_find_doublets_df.output
     output: 

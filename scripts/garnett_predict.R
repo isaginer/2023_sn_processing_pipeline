@@ -26,7 +26,7 @@ seu <- AddMetaData(seu, metadata)
 seu <- AddMetaData(seu, metadata_2)
 
 seu <- PercentageFeatureSet(seu,
-                                pattern = "^MT-", col.name = "percent.mt") %>%
+                                pattern = "^(MT|mt)-", col.name = "percent.mt") %>%
         SCTransform(method = "glmGamPoi",
                     vars.to.regress = "percent.mt", verbose = TRUE) %>%
         RunPCA(verbose = TRUE) %>%

@@ -27,6 +27,15 @@ samples: "data/samples_short.csv"
 # Garnett model
 #model_path: "reference/garnett/garnett_model.Rdata"
 
+# scType markers
+markers_file: "reference/scType/sc-type-master/Brain_Azimuth.xlsx"
+tissue: "Brain"
+# list of cell types to keep (optional)
+# cell_types: ["Astrocytes","Endothelial cells","GABAergic neurons","Glutamatergic neurons",
+#              "Microglial cells","Oligodendrocyte precursor cells","Oligodendrocytes"]
+sctype_resolution: 20
+stable_cluster_prc: 0.9
+
 # Parameters
 min_cells: 3
 min_features: 300
