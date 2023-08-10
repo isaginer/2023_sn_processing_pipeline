@@ -24,7 +24,8 @@ rule decontx_run_decontx:
         join(ALIGN_DIR, "{sample}", FILTERED_LOCATION),
         join(ALIGN_DIR, "{sample}", RAW_LOCATION)
     output:
-        join(DECONTX_DIR, "{sample}", "decontx.done")
+        join(DECONTX_DIR, "{sample}", "decontx.done"),
+        join(DECONTX_DIR, "{sample}", "unfiltered", "{sample}.rds"),
     log:
         "logs/{sample}/run_decontx.log"
     script:

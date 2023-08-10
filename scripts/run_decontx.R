@@ -24,11 +24,19 @@ sce <- SingleCellExperiment(list(counts = counts))
 sce.raw <- SingleCellExperiment(list(counts = counts.raw))
 sce <- decontX(sce, background = sce.raw)
 counts_new <- round(decontXcounts(sce))
+saveRDS(CreateSeuratObject(counts_new),
+        file.path(snakemake@output[[2]]))
+
+nfeatures <- apply(counts_new, 2, sum)
+min.features <- round(quantile(nfeatures, seq(0, 1, 0.05))["5%"])
+if (min.features < min_features) {
+  min.features <- min_features
+}
 
 # Create a Seurat object from a SCE with decontX results
 seu <- CreateSeuratObject(counts_new,
                         min.cells = min_cells,
-                        min.features = min_features)
+                        min.features = min.features)
 
 outs_path <- file.path(DECONTX_DIR, SAMPLE, "outs")
 dir.create(outs_path, showWarnings = FALSE, recursive = TRUE)

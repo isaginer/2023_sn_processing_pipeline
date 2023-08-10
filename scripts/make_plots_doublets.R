@@ -16,14 +16,8 @@ geom_density(alpha = 0.7) + theme_minimal() +
 guides(fill = guide_legend(title = "DoubletFinder"))
 
 #plot 3 density Unknown vs other Log UMI
-seu$garnett_class <- sapply(seu$garnett_prediction, function(x) {
-if (x != "Unknown") {
-    return("Other")
-} else {
-    return(x)
-}})
 
-plt3 <- ggplot(seu@meta.data, aes(x=log10(nCount_RNA), fill = garnett_class)) +
+plt3 <- ggplot(seu@meta.data, aes(x=log10(nCount_RNA), fill = Unknown_celltype)) +
 geom_density(alpha = 0.7) + theme_minimal() +
 guides(fill = guide_legend(title = "Garnett \nprediction"))
 
@@ -35,9 +29,12 @@ plt4 <- DimPlot(seu, group.by = "merged_doublets",
 plt6 <- DimPlot(seu, group.by = "pass_doublets_QC", order = "FAIL")
 
 #plot 7 UMAP clusters + UMAP garnett prediction
-plt7_1 <- DimPlot(seu, group.by = "seurat_clusters", label = T) + NoLegend()
-plt7_2 <- DimPlot(seu, group.by = "garnett_prediction")
-plt7 <- grid.arrange(plt7_1,plt7_2, ncol=1)
+plt7_1 <- DimPlot(seu, group.by = "seurat_clusters", label = TRUE) + NoLegend()
+plt7_2 <- DimPlot(seu, group.by = "sctype_prediction")
+plt7 <- grid.arrange(plt7_1, plt7_2, ncol = 1)
+
+#plot 8 Low quality cells with Unknown scType prediction
+plt8 <- DimPlot(seu, group.by = "Unknown_celltype")
 
 png(snakemake@output[[1]],
       height = 5, width = 6, units = "in", res = 300)
@@ -67,4 +64,9 @@ dev.off()
 png(snakemake@output[[6]],
     height = 10, width = 6, units = "in", res = 300)
 print(grid.arrange(plt7_1,plt7_2, ncol=1))
+dev.off()
+
+png(snakemake@output[[7]],
+    height = 5, width = 6, units = "in", res = 300)
+print(plt8)
 dev.off()
