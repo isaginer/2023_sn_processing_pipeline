@@ -8,7 +8,7 @@ seu_clean <- readRDS(snakemake@input[[1]])
 seu_clean <- SCTransform(
   seu_clean,
   ncells = min(100000, ncol(seu_clean)),
-  vars.to.regress = c("subsets_Mito_percent"),
+  vars.to.regress = c("subsets_Mito_percent", "subsets_Ribo_percent"),
   verbose = TRUE,
   conserve.memory = TRUE
 )

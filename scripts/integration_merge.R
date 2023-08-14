@@ -9,27 +9,27 @@ options(future.globals.maxSize = 150000 * 1024^2)
 # universal solution?
 add_metadata <- function(x, metadata) {
     seu <- readRDS(x)
-    pheno_name <- seu@project.name
-    pheno_name <- gsub("-1$", "", gsub("^MGI3522_CKAE-", "", pheno_name))
-    # That doesn't work
-    # seu <- AddMetaData(seu, metadata[pheno_name, ])
+    pheno_name <- as.character(unique(seu@meta.data$orig.ident))
     for (col_ in colnames(metadata)) {
         seu@meta.data[, col_] <- metadata[pheno_name, col_]
     }
     seu
 }
 
-metadata <- as.data.frame(read_excel(snakemake@input[["phenodata"]]))
-rownames(metadata) <- lapply(metadata[, 1],
-                            function(x) {
-                                gsub("/", "-", gsub(" BA5$", "", x))
-                            })
-colnames(metadata) <- str_replace_all(colnames(metadata), " ", "_")
-
 normalized_samples <- snakemake@input[["samples_rds"]]
 names(normalized_samples) <- snakemake@params$samples
 
-seu.list <- lapply(normalized_samples, function(x) {add_metadata(x, metadata)})
+if ("phenodata" %in% names(snakemake@config)) {
+    metadata <- as.data.frame(read_excel(snakemake@config[["phenodata"]]))
+    rownames(metadata) <- metadata[, 1]
+    colnames(metadata) <- str_replace_all(colnames(metadata), " ", "_")
+    seu.list <- lapply(normalized_samples, function(x) {
+        add_metadata(x, metadata) })
+} else {
+    seu.list <- lapply(normalized_samples, function(x) {
+        readRDS(x)
+    })
+}
 
 integration_nfeatures <- snakemake@config[["integration_nfeatures"]]
 integration_ndims <- snakemake@config[["integration_ndims"]]
