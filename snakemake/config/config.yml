@@ -47,6 +47,7 @@ detected_log_nmad: [1, 2, 3]
 prc_20_nmad: [3, 4, 5, 6]
 prc_mt_nmad: [5, 6, 7, 10]
 mt_thresh: 10
+ribo_thresh: 5
 nuclei_thresh: 1
 keep_statement: ["outlier_sum_log_6_lower",
                  "outlier_detected_log_2_lower",

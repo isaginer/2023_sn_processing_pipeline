@@ -63,7 +63,7 @@ dev.off()
 
 png(snakemake@output[[6]],
     height = 10, width = 6, units = "in", res = 300)
-print(grid.arrange(plt7_1,plt7_2, ncol=1))
+print(grid.arrange(plt7_1, plt7_2, ncol = 1))
 dev.off()
 
 png(snakemake@output[[7]],

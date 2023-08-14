@@ -16,7 +16,7 @@ nuclei_genes_mm <- c("Malat1","Neat1","Ftx","Foxp1","Rbms3","Zbtb20","Lrmda",
                      "Rere", "Mbd5", "Ext1", "Wwox")
 nuclei_genes <- c(nuclei_genes_hs,nuclei_genes_mm)
 
-seu_sub <- readRDS(snakemake@input[[1]])
+seu_sub <- readRDS(snakemake@input[["qc_step_1"]])
 DefaultAssay(seu_sub) <- "RNA"
 
 seu_sub <- PercentageFeatureSet(seu_sub, pattern = "^(MT|mt)-", col.name = "percent.mt")

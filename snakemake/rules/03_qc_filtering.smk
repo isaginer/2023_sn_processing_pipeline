@@ -6,7 +6,10 @@ include: "load_samples.smk"
 
 # Variables
 DBL_FILTERED_DIR = join(config["doublets_dir"],"filtered")
-COMPLEX_DIR = join(config["qc_dir"],"complex")
+MAD_DIR = join(config["qc_dir"],"mad_qc")
+MAD_DIR_FILTERED = join(MAD_DIR, "filtered")
+CELLTYPES_DIR = join(config["qc_dir"],"celltypes_qc")
+
 FILTERED_DIR = join(config["qc_dir"],"filtered")
 PROCESSED_DIR = join(config["qc_dir"],"processed")
 STATS_DIR = config["stats_dir"]
@@ -16,7 +19,8 @@ plots_list = ["umi_vs_genes", "mt_vs_nuclei", "mt_vs_umi",
               "umap_log_umi", "umap_umi_pass", "umap_ngenes", 
               "umap_ngenes_pass", "umap_garnett", "qc_pass"]
 
-all_output_list = [join(COMPLEX_DIR,"{sample}.rds"),
+all_output_list = [join(MAD_DIR,"{sample}.rds"),
+                   join(CELLTYPES_DIR,"{sample}.rds"),
                    join(FILTERED_DIR,"{sample}.rds"),
                    join(STATS_DIR,"qc_stats.tsv"),
                    *[join(PLOTS_DIR,e,"{sample}.png") for e in plots_list]
@@ -39,18 +43,33 @@ rule filter_samples_by_QC:
     input:
         join(DBL_FILTERED_DIR,"{sample}.rds")
     output:
-        join(COMPLEX_DIR,"{sample}.rds")
+        join(MAD_DIR,"{sample}.rds")
     log:
         "logs/{sample}/filter_samples_by_QC.log"
     script:
         "../../scripts/get_cells_QC.R"
+
+rule qc_by_cell_types:
+    conda: 
+        config["conda_env"]
+    input: 
+        join(DBL_FILTERED_DIR,"{sample}.rds"),
+        join(MAD_DIR,"{sample}.rds")
+    output: 
+        qc_step_1 = join(MAD_DIR_FILTERED,"{sample}.rds"),
+        qc_step_2 = join(CELLTYPES_DIR,"{sample}.rds")
+    log:
+        "logs/{sample}/cell_types_qc.log"
+    script:
+        "../../scripts/cell_types_qc.R"  
 
 rule qc_process:
     conda: 
         config["conda_env"]
     input: 
         join(DBL_FILTERED_DIR,"{sample}.rds"),
-        join(COMPLEX_DIR,"{sample}.rds")
+        join(MAD_DIR,"{sample}.rds"),
+        join(CELLTYPES_DIR,"{sample}.rds")
     output: 
         processed = join(PROCESSED_DIR,"{sample}.rds"),
         filtered = join(FILTERED_DIR,"{sample}.rds")
@@ -63,7 +82,7 @@ rule qc_make_plots:
     conda: 
         config["conda_env"]
     input: 
-        rules.qc_process.output.processed
+        qc_step_1 = rules.qc_by_cell_types.output.qc_step_1
     output: 
         [join(PLOTS_DIR,e,"{sample}.png") for e in plots_list]
     params:
@@ -78,7 +97,9 @@ rule qc_collect_stats:
     conda: 
         config["conda_env"]
     input: 
-        expand(rules.qc_process.output.processed,
+        step_1 = expand(rules.qc_by_cell_types.output.qc_step_1,
+               sample = SAMPLES_DF.index),
+        step_2 = expand(rules.qc_process.output.processed,
                sample = SAMPLES_DF.index)
     output: 
         join(STATS_DIR,"qc_stats.tsv")
