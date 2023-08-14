@@ -19,7 +19,7 @@ guides(fill = guide_legend(title = "DoubletFinder"))
 
 plt3 <- ggplot(seu@meta.data, aes(x=log10(nCount_RNA), fill = Unknown_celltype)) +
 geom_density(alpha = 0.7) + theme_minimal() +
-guides(fill = guide_legend(title = "Garnett \nprediction"))
+guides(fill = guide_legend(title = "ScType \nprediction"))
 
 #plot 4 UMAP doublet overlap
 plt4 <- DimPlot(seu, group.by = "merged_doublets",
