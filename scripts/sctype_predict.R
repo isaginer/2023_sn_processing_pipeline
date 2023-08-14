@@ -94,7 +94,7 @@ for (prediction_ct in thresholds$sctype_prediction) {
 }
 
 sctype_predictions <- cbind(as.data.frame(t(es.max)),
-seu@meta.data[,c("sctype_prediction","low_quality")])
+seu@meta.data[,c("sctype_prediction", "low_quality")])
 colnames(sctype_predictions) <- c(rownames(es.max), "sctype_prediction", "Unknown_celltype")
 sctype_predictions <- sctype_predictions[rownames(seu@meta.data), ]
 

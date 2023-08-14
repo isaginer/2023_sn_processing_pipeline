@@ -8,50 +8,27 @@ ndims <- snakemake@config[["processing_ndims"]]
 
 seu <- readRDS(snakemake@input[[1]])
 metadata <- readRDS(snakemake@input[[2]])
+metadata_2 <- readRDS(snakemake@input[[3]])
 
 seu <- AddMetaData(seu, metadata)
-DefaultAssay(seu) <- "RNA"
+selected_cells <- rownames(seu@meta.data[seu$keep, ])
+seu$pass_QC_1 <- "FAIL"
+seu@meta.data[selected_cells, "pass_QC_1"] <- "PASS"
+seu <- subset(seu, pass_QC_1 == "PASS")
 
-seu <- PercentageFeatureSet(seu,
-                            pattern = "^(MT|mt)-",
-                            col.name = "percent.mt") %>%
-    SCTransform(method = "glmGamPoi",
-                vars.to.regress = "percent.mt", verbose = FALSE) %>%
+seu <- AddMetaData(seu, metadata_2)
+
+DefaultAssay(seu) <- "RNA"
+seu <- SCTransform(seu, method = "glmGamPoi",
+                    vars.to.regress = "subsets_Mito_percent",
+                    verbose = FALSE) %>%
     RunPCA(verbose = FALSE) %>%
     RunUMAP(dims = 1:ndims, verbose = FALSE) %>%
     FindNeighbors(dims = 1:ndims, verbose = FALSE) %>%
     FindClusters(verbose = FALSE)
 
 seu$qc_cluster_ext_type <- "Not_predicted"
-# counts <- GetAssayData(seu, assay = "SCT", slot = "counts")
-# meta <- seu@meta.data
-# fdata <- (rownames(counts))
-# fdata <- as.data.frame(fdata)
-# colnames(fdata) <- "gene_short_name"
-# rownames(fdata) <- fdata$gene_short_name
-# row.names(counts) <- row.names(fdata)
-# colnames(counts) <- row.names(meta)
-# pdata <- meta
-
-# pd <- new("AnnotatedDataFrame", data = pdata)
-# fd <- new("AnnotatedDataFrame", data = fdata)
-# cds_seu <- newCellDataSetProb(counts, phenoData = pd, featureData = fd)
-# cds_seu <- estimateSizeFactors(cds_seu)
-# pData(cds_seu)$garnett_cluster <- pData(cds_seu)[, "seurat_clusters"]
-
-# predicted_cds <- classify_cells(cds_seu, trained_classifier,
-#                                 db = org.Hs.eg.db,
-#                                 cluster_extend = TRUE,
-#                                 cds_gene_id_type = "SYMBOL",
-#                                 verbose = TRUE)
-# predictions <- pData(predicted_cds)[,c("cluster_ext_type")]
-# colnames(predictions) <- paste0("qc_",colnames(predictions))
-# seu <- AddMetaData(seu, predictions)
-
-selected_cells <- rownames(seu@meta.data[seu$keep, ])
-seu$pass_QC <- "FAIL"
-seu@meta.data[selected_cells,"pass_QC"] <- "PASS"
 saveRDS(seu, file = snakemake@output[[1]])
 
-seu_filtered <- subset(seu, pass_QC == "PASS")
+seu_filtered <- subset(seu, pass_QC_2 == "PASS")
 saveRDS(seu_filtered, file = snakemake@output[[2]])
