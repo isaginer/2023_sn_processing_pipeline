@@ -68,11 +68,11 @@ top_1_cluster_stats <- as.data.frame(cluster_stats %>% group_by_at(paste0("SCT_s
 
 toPlot <- merge(agg_data,top_1_cluster_stats, by = c(paste0("SCT_snn_res.",res))) %>% 
   arrange(prc)
-toPlot[toPlot$value < 0, "value"] <- 0
+#toPlot[toPlot$value < 0, "value"] <- 0
 
 stableClusters <- toPlot %>% filter(prc > stable_cluster_prc) %>%
   group_by(sctype_prediction) %>%
-  mutate(across(all_of(cell_types), ~ median(.x) + 2 * sd(.x)), .keep = "used") %>%
+  mutate(across(all_of(cell_types), ~ min(.x)), .keep = "used") %>%
   distinct() %>% pivot_longer(cell_types)
 stableClusters$sctype_prediction <- gsub(" ",".",stableClusters$sctype_prediction)
 
@@ -86,10 +86,10 @@ thresholds <- thresholds[!is.na(thresholds$value), ]
 
 seu$low_quality <- FALSE
 for (prediction_ct in thresholds$sctype_prediction) {
-  toPlot_sub <- toPlot %>% filter(prc <= 0.9) %>%
+  toPlot_sub <- toPlot %>% filter(prc <= stable_cluster_prc) %>%
     filter(sctype_prediction == prediction_ct)
-  ct_median <- as.numeric(thresholds[thresholds$sctype_prediction == prediction_ct,"value"])
-  low_quality_clusters <- as.numeric(toPlot_sub[toPlot_sub[,prediction_ct] < ct_median, paste0("SCT_snn_res.",res)])
+  ct_minimum <- as.numeric(thresholds[thresholds$sctype_prediction == prediction_ct,"value"])
+  low_quality_clusters <- as.numeric(toPlot_sub[toPlot_sub[,prediction_ct] < ct_minimum, paste0("SCT_snn_res.",res)])
   seu@meta.data[seu@meta.data[,paste0("SCT_snn_res.",res)] %in% low_quality_clusters, "low_quality"] <- T
 }
 
