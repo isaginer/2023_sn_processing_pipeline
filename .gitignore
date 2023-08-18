@@ -1,6 +1,6 @@
 data/*
 logs/*
-reference/*
+reference/garnett/*
 !.dvc
 .snakemake/*
 .vscode/*
