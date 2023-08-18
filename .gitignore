@@ -6,3 +6,5 @@ reference/*
 .vscode/*
 statistics/*
 plots/*
+additional_plots/*
+*DS_Store*

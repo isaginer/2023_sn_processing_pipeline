@@ -28,6 +28,7 @@ saveRDS(CreateSeuratObject(counts_new),
         file.path(snakemake@output[[2]]))
 
 nfeatures <- apply(counts_new, 2, sum)
+nfeatures <- nfeatures[nfeatures > 0]
 min.features <- round(quantile(nfeatures, seq(0, 1, 0.05))["5%"])
 if (min.features < min_features) {
   min.features <- min_features
