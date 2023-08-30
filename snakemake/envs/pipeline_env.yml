@@ -1,6 +1,7 @@
 name: 2023_aus_brain
 channels:
   - conda-forge
+  - bioconda
 dependencies:
   - r-base=4.2.2
   - r-ragg=1.2.5
@@ -10,3 +11,4 @@ dependencies:
   - ca-certificates
   - openssl
   - r-magick
+  - anndata
