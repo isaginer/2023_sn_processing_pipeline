@@ -1,6 +1,6 @@
 # Single nuclei RNA seq processing pipeline (2023 version)
 
-Managed by [@aladyeva-wustl](https://github.com/aladyeva-wustl)
+Managed by [@aladyeva-research](https://github.com/aladyeva-research)
 
 Repository with single nuclei RNAseq initial (QC + integration) data analysis pipeline
 ## Stages:
