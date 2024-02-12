@@ -1,5 +1,7 @@
 install.packages('pak', repos = 'http://cran.us.r-project.org')
 print("Installing packages")
+print("Installing SeuratObject...")
+pak::pkg_install('satijalab/seurat-object@release/4.1.4')
 print("Installing Seurat...")
 pak::pkg_install('satijalab/seurat@seurat4')
 print("Installing scuttle...")
