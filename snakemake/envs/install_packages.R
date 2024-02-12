@@ -1,7 +1,7 @@
 install.packages('pak', repos = 'http://cran.us.r-project.org')
 print("Installing packages")
 print("Installing Seurat...")
-pak::pkg_install('Seurat')
+pak::pkg_install('satijalab/seurat@seurat4')
 print("Installing scuttle...")
 pak::pkg_install('scuttle')
 print("Installing glmGamPoi...")
