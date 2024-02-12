@@ -8,6 +8,7 @@ dependencies:
   - r-tidyverse=1.3.2
   - r-readxl=1.4.2
   - r-polyclip
+  - r-igraph
   - r-xml
   - ca-certificates
   - openssl
