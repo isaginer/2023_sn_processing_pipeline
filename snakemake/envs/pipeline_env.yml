@@ -14,3 +14,6 @@ dependencies:
   - openssl
   - r-magick
   - anndata
+  - r-kernsmooth=2.23_24
+  - r-httpuv
+  - r-fields
