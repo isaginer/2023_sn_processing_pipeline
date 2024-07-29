@@ -38,7 +38,7 @@ best_pk <- as.numeric(as.character(bcmvn[which.max(bcmvn$BCmetric), "pK"]))
 
 nexp_poi <- round(doublets_prc * nrow(seu@meta.data))
 
-seu <- doubletFinder_v3(seu, PCs = 1:dims_, pN = 0.25,
+seu <- doubletFinder(seu, PCs = 1:dims_, pN = 0.25,
                         pK = best_pk, nExp = nexp_poi,
                         reuse.pANN = FALSE, sct = TRUE)
 columns_ <- colnames(seu@meta.data)

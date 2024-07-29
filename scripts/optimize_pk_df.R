@@ -28,7 +28,7 @@ seu <- CreateSeuratObject(counts,
     RunUMAP(dims = 1:dims_)
 
 # Optimization of parameters
-sweep_res_list <- paramSweep_v3(seu, PCs = 1:dims_, sct = TRUE)
+sweep_res_list <- paramSweep(seu, PCs = 1:dims_, sct = TRUE)
 sweep_stats <- summarizeSweep(sweep_res_list, GT = FALSE)
 bcmvn <- find.pK(sweep_stats)
 saveRDS(bcmvn, file = snakemake@output[[1]])
