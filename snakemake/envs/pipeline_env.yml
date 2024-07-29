@@ -17,3 +17,4 @@ dependencies:
   - r-kernsmooth=2.23_24
   - r-httpuv
   - r-fields
+  - r-matrixstats=1.1.0
