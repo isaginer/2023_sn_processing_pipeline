@@ -35,7 +35,8 @@ rule integration_sct:
     output:
         os.path.join(SCT_DIR,"{sample}.rds")
     log:
-        "logs/{sample}/integration_sct.log"
+        err="logs/{sample}/integration_sct.err",
+        log="logs/{sample}/integration_sct.log",
     script:
         "../../scripts/integration_sct.R"
 
@@ -53,7 +54,8 @@ rule integration_merge:
     params:
         samples = SAMPLES_DF.index
     log:
-        "logs/integration_merge.log"
+        err="logs/integration_merge.err",
+        log="logs/integration_merge.log",
     script:
         "../../scripts/integration_merge.R"
 
@@ -68,7 +70,8 @@ rule integration_plots:
     params:
         plots_list = plots_list
     log:
-        "logs/integration_plot.log"
+        err="logs/integration_plot.err",
+        log="logs/integration_plot.log"
     script:
         "../../scripts/make_plots_integration.R"
 
@@ -80,6 +83,7 @@ rule integration_cellxgene:
     output:
         join(CELLXGENE_DIR,"merged.h5ad")
     log:
-        "logs/integration_cellxgene.log"
+        err="logs/integration_cellxgene.err",
+        log="logs/integration_cellxgene.log"
     script:
         "../../scripts/integration_cellxgene.R"

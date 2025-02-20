@@ -1,3 +1,8 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
+
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(HGNChelper))
@@ -95,3 +100,6 @@ metadata <- seu_filtered@meta.data[,c("qc_sctype_prediction",
                                       "pass_QC_2")]
 
 saveRDS(metadata, snakemake@output[[2]])
+
+sink()
+sink()

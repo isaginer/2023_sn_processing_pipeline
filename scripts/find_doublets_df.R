@@ -1,3 +1,7 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
 
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(data.table))
@@ -58,3 +62,7 @@ colnames(to_save) <- gsub("[0-9.]+$", "prc", colnames(to_save))
 
 saveRDS(to_save,
         file = snakemake@output[[1]])
+
+sink()
+sink()
+      

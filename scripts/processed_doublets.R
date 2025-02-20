@@ -1,3 +1,8 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
+
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(dplyr))
 set.seed(123)
@@ -43,3 +48,6 @@ saveRDS(seu, file = snakemake@output[[1]])
 
 seu_filtered <- subset(seu, pass_doublets_QC == "PASS")
 saveRDS(seu_filtered, file = snakemake@output[[2]])
+
+sink()
+sink()

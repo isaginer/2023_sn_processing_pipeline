@@ -1,3 +1,8 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
+
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(celda))
 suppressPackageStartupMessages(library(DropletUtils))
@@ -47,3 +52,6 @@ write10xCounts(x = seu@assays$RNA@counts,
                 path = file.path(outs_path, "filtered_feature_bc_matrix"))
 
 cat(NULL, file = snakemake@output[[1]])
+
+sink()
+sink()

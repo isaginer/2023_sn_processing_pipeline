@@ -1,3 +1,7 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
 
 suppressPackageStartupMessages(library(Seurat))
 set.seed(123)
@@ -23,3 +27,6 @@ seu_clean <- CellCycleScoring(seu_clean, s.features = s.genes,
                               g2m.features = g2m.genes, set.ident = FALSE,
                               assay = "SCT")
 saveRDS(seu_clean, file = snakemake@output[[1]])
+
+sink()
+sink()

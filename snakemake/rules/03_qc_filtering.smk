@@ -45,7 +45,8 @@ rule filter_samples_by_QC:
     output:
         join(MAD_DIR,"{sample}.rds")
     log:
-        "logs/{sample}/filter_samples_by_QC.log"
+        err="logs/{sample}/filter_samples_by_QC.err",
+        log="logs/{sample}/filter_samples_by_QC.log"
     script:
         "../../scripts/get_cells_QC.R"
 
@@ -59,7 +60,8 @@ rule qc_by_cell_types:
         qc_step_1 = join(MAD_DIR_FILTERED,"{sample}.rds"),
         qc_step_2 = join(CELLTYPES_DIR,"{sample}.rds")
     log:
-        "logs/{sample}/cell_types_qc.log"
+        err="logs/{sample}/cell_types_qc.err",
+        log="logs/{sample}/cell_types_qc.log"
     script:
         "../../scripts/cell_types_qc.R"  
 
@@ -74,7 +76,8 @@ rule qc_process:
         processed = join(PROCESSED_DIR,"{sample}.rds"),
         filtered = join(FILTERED_DIR,"{sample}.rds")
     log:
-        "logs/{sample}/processed_qc.log"
+        err="logs/{sample}/processed_qc.err",
+        log="logs/{sample}/processed_qc.log"
     script:
         "../../scripts/processed_qc.R"
 
@@ -88,7 +91,8 @@ rule qc_make_plots:
     params:
         plots_list = plots_list
     log:
-        "logs/{sample}/make_plots_qc.log"
+        err="logs/{sample}/make_plots_qc.err",
+        log="logs/{sample}/make_plots_qc.log"
     script:
         "../../scripts/make_plots_qc.R"
 
@@ -106,7 +110,8 @@ rule qc_collect_stats:
     params:
         plots_list = plots_list
     log:
-        "logs/collect_stats_qc.log"
+        err="logs/collect_stats_qc.err",
+        log="logs/collect_stats_qc.log"
     script:
         "../../scripts/collect_stats_qc.R"
 
@@ -122,6 +127,7 @@ rule qc_integrate:
         features = join(PROCESSED_DIR,"integrated_features.qs"),
         anchors = join(PROCESSED_DIR,"integrated_anchors.qs")
     log:
-        "logs/integrate_qc.log"
+        err="logs/integrate_qc.err",
+        log="logs/integrate_qc.log"
     script:
         "../../scripts/integrate_qc.R"

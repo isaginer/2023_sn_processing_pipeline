@@ -51,7 +51,8 @@ rule doublets_optimize_pk_df:
     params:
         mtx_location = CR_LOCATION
     log:
-        "logs/{sample}/optimize_pk_df.log"
+        err="logs/{sample}/optimize_pk_df.err",
+        log="logs/{sample}/optimize_pk_df.log"
     script:
         "../../scripts/optimize_pk_df.R"
 
@@ -66,7 +67,8 @@ rule doublets_find_doublets_scdf:
     params:
         mtx_location = CR_LOCATION
     log:
-        "logs/{sample}/find_doublets_scdf.log"
+        err="logs/{sample}/find_doublets_scdf.err",
+        log="logs/{sample}/find_doublets_scdf.log"
     script:
         "../../scripts/find_doublets_scdf.R"
 
@@ -83,7 +85,8 @@ rule doublets_find_doublets_df:
     params:
         mtx_location = CR_LOCATION
     log:
-        "logs/{sample}/find_doublets_df.log"
+        err="logs/{sample}/find_doublets_df.err",
+        log="logs/{sample}/find_doublets_df.log"
     script:
         "../../scripts/find_doublets_df.R"
 
@@ -100,7 +103,8 @@ rule doublets_garnett_predict:
     params:
         mtx_location = CR_LOCATION
     log:
-        "logs/{sample}/garnett_predict.log"
+        err="logs/{sample}/garnett_predict.err",
+        log="logs/{sample}/garnett_predict.log"
     script:
         "../../scripts/garnett_predict.R"
 
@@ -115,7 +119,8 @@ rule doublets_sctype_predict:
     params:
         mtx_location = CR_LOCATION
     log:
-        "logs/{sample}/sctype_predict.log"
+        err="logs/{sample}/sctype_predict.err",
+        log="logs/{sample}/sctype_predict.log"
     script:
         "../../scripts/sctype_predict.R"
 
@@ -134,7 +139,8 @@ rule doublets_process:
     params:
         mtx_location = CR_LOCATION
     log:
-        "logs/{sample}/processed_doublets.log"
+        err="logs/{sample}/processed_doublets.err",
+        log="logs/{sample}/processed_doublets.log"
     script:
         "../../scripts/processed_doublets.R"
 
@@ -149,7 +155,8 @@ rule doublets_make_plots:
     params:
         plots_list = plots_list
     log:
-        "logs/{sample}/make_plots_doublets.log"
+        err="logs/{sample}/make_plots_doublets.log",
+        log="logs/{sample}/make_plots_doublets.err"
     script:
         "../../scripts/make_plots_doublets.R"
 
@@ -165,7 +172,8 @@ rule doublets_collect_stats:
     params:
         plots_list = plots_list
     log:
-        "logs/collect_stats_doublets.log"
+        err="logs/collect_stats_doublets.err",
+        log="logs/collect_stats_doublets.log"
     script:
         "../../scripts/collect_stats_doublets.R"
 
@@ -183,6 +191,7 @@ rule doublets_integrate:
     params:
         plots_list = plots_list
     log:
-        "logs/integrate_doublets.log"
+        err="logs/integrate_doublets.err",
+        log="logs/integrate_doublets.log"
     script:
         "../../scripts/integrate_doublets.R"

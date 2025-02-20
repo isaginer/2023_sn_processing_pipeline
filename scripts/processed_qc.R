@@ -1,4 +1,8 @@
 # processed_qc.R
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
 
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(dplyr))
@@ -32,3 +36,6 @@ saveRDS(seu, file = snakemake@output[[1]])
 
 seu_filtered <- subset(seu, pass_QC_2 == "PASS")
 saveRDS(seu_filtered, file = snakemake@output[[2]])
+
+sink()
+sink()
