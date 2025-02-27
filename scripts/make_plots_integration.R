@@ -38,4 +38,3 @@ print(plt3)
 dev.off()
 
 sink()
-sink()

@@ -67,4 +67,3 @@ merged.integrated <- RunPCA(merged.integrated, verbose = FALSE) %>%
 qsave(merged.integrated, file = snakemake@output[["integrated"]])
 
 sink()
-sink()

@@ -38,4 +38,3 @@ bcmvn <- find.pK(sweep_stats)
 saveRDS(bcmvn, file = snakemake@output[[1]])
 
 sink()
-sink()

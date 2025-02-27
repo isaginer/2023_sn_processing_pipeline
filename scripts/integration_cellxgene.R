@@ -14,4 +14,3 @@ sceasy::convertFormat(merged.integrated, from = "seurat", to = "anndata",
                        outFile = snakemake@output[[1]])
 
 sink()
-sink()

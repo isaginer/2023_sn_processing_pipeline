@@ -76,4 +76,3 @@ per_cell.stats$keep <- !apply(per_cell.stats[, keep_columns],
 saveRDS(per_cell.stats, snakemake@output[[1]])
 
 sink()
-sink()

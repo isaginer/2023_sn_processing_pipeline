@@ -112,4 +112,3 @@ print(plt15)
 dev.off()
 
 sink()
-sink()

@@ -106,4 +106,3 @@ sctype_predictions <- sctype_predictions[rownames(seu@meta.data), ]
 saveRDS(sctype_predictions, snakemake@output[[1]])
 
 sink()
-sink()

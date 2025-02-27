@@ -54,4 +54,3 @@ write10xCounts(x = seu@assays$RNA@counts,
 cat(NULL, file = snakemake@output[[1]])
 
 sink()
-sink()

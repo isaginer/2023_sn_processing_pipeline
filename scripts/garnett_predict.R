@@ -94,4 +94,3 @@ garnett_metadata <- seu@meta.data[,c("seurat_clusters", "Size_Factor", "garnett_
 saveRDS(garnett_metadata, snakemake@output[[1]])
 
 sink()
-sink()

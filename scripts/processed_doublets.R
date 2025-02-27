@@ -50,4 +50,3 @@ seu_filtered <- subset(seu, pass_doublets_QC == "PASS")
 saveRDS(seu_filtered, file = snakemake@output[[2]])
 
 sink()
-sink()

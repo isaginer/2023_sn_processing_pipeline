@@ -29,4 +29,3 @@ seu_clean <- CellCycleScoring(seu_clean, s.features = s.genes,
 saveRDS(seu_clean, file = snakemake@output[[1]])
 
 sink()
-sink()

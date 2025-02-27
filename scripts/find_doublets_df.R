@@ -64,5 +64,3 @@ saveRDS(to_save,
         file = snakemake@output[[1]])
 
 sink()
-sink()
-      

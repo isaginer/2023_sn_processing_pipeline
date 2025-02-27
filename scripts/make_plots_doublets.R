@@ -77,4 +77,3 @@ print(plt8)
 dev.off()
 
 sink()
-sink()

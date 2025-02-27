@@ -21,4 +21,3 @@ sce <- scDblFinder(GetAssayData(seu, slot = "counts"))
 saveRDS(colData(sce), file = snakemake@output[[1]])
 
 sink()
-sink()

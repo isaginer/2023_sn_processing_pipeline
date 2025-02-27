@@ -102,4 +102,3 @@ metadata <- seu_filtered@meta.data[,c("qc_sctype_prediction",
 saveRDS(metadata, snakemake@output[[2]])
 
 sink()
-sink()

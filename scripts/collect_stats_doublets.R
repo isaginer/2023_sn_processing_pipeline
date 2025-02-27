@@ -61,4 +61,3 @@ write.table(doublets_stats,
             row.names = TRUE, col.names = NA)
 
 sink()
-sink()
