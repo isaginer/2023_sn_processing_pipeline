@@ -1,4 +1,8 @@
 # make_plots_integration.R
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
 
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(ggplot2))
@@ -32,3 +36,5 @@ png(snakemake@output[[3]],
     height = 5, width = 6, units = "in", res = 300)
 print(plt3)
 dev.off()
+
+sink()

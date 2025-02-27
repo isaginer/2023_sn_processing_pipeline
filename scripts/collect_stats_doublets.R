@@ -1,3 +1,8 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
+
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(dplyr))
 set.seed(123)
@@ -54,3 +59,5 @@ write.table(doublets_stats,
             file = snakemake@output[[1]],
             sep = "\t", quote = FALSE,
             row.names = TRUE, col.names = NA)
+
+sink()

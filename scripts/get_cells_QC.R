@@ -1,3 +1,7 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
 
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(data.table))
@@ -70,3 +74,5 @@ per_cell.stats$keep <- !apply(per_cell.stats[, keep_columns],
 
 #seu_sub <- AddMetaData(seu_sub, per_cell.stats)
 saveRDS(per_cell.stats, snakemake@output[[1]])
+
+sink()

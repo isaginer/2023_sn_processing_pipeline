@@ -1,3 +1,8 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
+
 suppressPackageStartupMessages(library(readxl))
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(stringr))
@@ -60,3 +65,5 @@ merged.integrated <- RunPCA(merged.integrated, verbose = FALSE) %>%
         FindClusters(verbose = FALSE, resolution = clustering_res)
 
 qsave(merged.integrated, file = snakemake@output[["integrated"]])
+
+sink()

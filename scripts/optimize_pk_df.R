@@ -1,3 +1,7 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
 
 library(Seurat)
 library(data.table)
@@ -32,3 +36,5 @@ sweep_res_list <- paramSweep(seu, PCs = 1:dims_, sct = TRUE)
 sweep_stats <- summarizeSweep(sweep_res_list, GT = FALSE)
 bcmvn <- find.pK(sweep_stats)
 saveRDS(bcmvn, file = snakemake@output[[1]])
+
+sink()

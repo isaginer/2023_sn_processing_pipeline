@@ -1,3 +1,8 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
+
 suppressPackageStartupMessages(library(Seurat))
 suppressPackageStartupMessages(library(ggplot2))
 suppressPackageStartupMessages(library(gridExtra))
@@ -70,3 +75,5 @@ png(snakemake@output[[7]],
     height = 5, width = 6, units = "in", res = 300)
 print(plt8)
 dev.off()
+
+sink()

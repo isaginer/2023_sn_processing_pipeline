@@ -1,3 +1,8 @@
+output_log <- file(snakemake@log[[2]], open="wt")
+error_log <- file(snakemake@log[[1]], open="wt")
+sink(output_log, type = "output")
+sink(error_log, type = "message")
+
 suppressPackageStartupMessages(library(dplyr))
 suppressPackageStartupMessages(library(garnett))
 suppressPackageStartupMessages(library(Seurat))
@@ -87,3 +92,5 @@ seu <- AddMetaData(seu, predicted_cds@probabilities)
 garnett_metadata <- seu@meta.data[,c("seurat_clusters", "Size_Factor", "garnett_cluster", "cell_type", 
                                      "cluster_ext_type", "garnett_prediction", colnames(predicted_cds@probabilities))]
 saveRDS(garnett_metadata, snakemake@output[[1]])
+
+sink()

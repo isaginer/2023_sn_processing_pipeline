@@ -27,6 +27,7 @@ rule decontx_run_decontx:
         join(DECONTX_DIR, "{sample}", "decontx.done"),
         join(DECONTX_DIR, "{sample}", "unfiltered", "{sample}.rds"),
     log:
-        "logs/{sample}/run_decontx.log"
+        err="logs/{sample}/run_decontx.err",
+        log="logs/{sample}/run_decontx.log"
     script:
         "../../scripts/run_decontx.R"
